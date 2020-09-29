@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>用户关联角色</title>
+	<script th:src="@{/layui/jquery.min.js}"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}"/>
+	<script th:src="@{/layui/layui.js}"></script>
+	<script th:src="@{/assets/js/templet.js}"></script>
+</head>
+<body>
+<div id="transfer"></div>
+<div class="layui-input-block"></div>
+<div class="layui-input-block">
+	<button class="layui-btn layui-btn-primary tree-cancel">关闭</button>
+</div>
+
+</body>
+
+<script>
+	layui.use(['form','layer','transfer'], function(){
+		var form = layui.form;
+		var layer = layui.layer;
+		var transfer = layui.transfer;
+		var $ = layui.jquery;
+
+		window.ajaxLoadTransfer = function (userid) {
+
+			$.ajax({
+				url:'/user/ajaxLoadTransferUserRelRole',
+				type:'post',
+				data:{
+					userid:userid
+				},
+				success:function(result){
+					if(result.state == 1){
+						laodTransfer(result.data.data,result.data.value,userid);
+					}else{
+						layer.msg(result.message,{icon: 5});
+					}
+				}
+			});
+		}
+
+		function laodTransfer(data,value,userid){
+			transfer.render({
+				elem: '#transfer'  //绑定元素
+				,title: ['未选中','选中']
+				,showSearch:true
+				,height:600
+				,data:  data
+				,value: value
+				,id: 'mtId' //定义索引
+				,onchange: function(data, index){
+					if(index==0){
+						addSelect(data,userid);
+					}else{
+						delSelect(data,userid);
+					}
+				}
+			});
+		}
+
+		function addSelect(data,userid){
+			$.ajax({
+				url:'/user/addSelectRole',
+				type:'post',
+				data:{
+					userid:userid,
+					data:JSON.stringify(data)
+				},
+				success:function(result){
+					if(result.state == 1){
+					}else{
+						layer.msg(result.message,{icon: 5});
+					}
+				}
+			});
+		}
+
+		function delSelect(data,userid){
+			$.ajax({
+				url:'/user/delSelectRole',
+				type:'post',
+				data:{
+					userid:userid,
+					data:JSON.stringify(data)
+				},
+				success:function(result){
+					if(result.state == 1){
+					}else{
+						layer.msg(result.message,{icon: 5});
+					}
+				}
+			});
+		}
+
+		//关闭
+		$('.tree-cancel').on('click', function () {
+			var index = parent.layer.getFrameIndex(window.name);
+			parent.layer.close(index);
+		});
+
+	});
+
+</script>
+<style>
+
+</style>
+</html>

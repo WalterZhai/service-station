@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>新建消息</title>
+	<script th:src="@{/layui/jquery.min.js}"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}"/>
+	<script th:src="@{/layui/layui.js}"></script>
+	<script th:src="@{/assets/js/templet.js}"></script>
+</head>
+<body>
+
+<div class="layui-tab">
+	<ul class="layui-tab-title">
+		<li class="layui-this">发送给所有人</li>
+		<li>发送给角色</li>
+		<li>发送给指定用户</li>
+		<li>发送给用户组</li>
+	</ul>
+	<div class="layui-tab-content">
+		<div class="layui-tab-item layui-show">
+			<form class="layui-form layui-form-pane" action="" method="post" onsubmit="return false;">
+				<div class="layui-form-item">
+					<label class="layui-form-label">消息标题</label>
+					<div class="layui-input-block">
+						<input type="text" name="title" required  lay-verify="required" placeholder="请输入消息标题" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">消息内容</label>
+					<div class="layui-input-block">
+						<textarea name="content" required  lay-verify="required" placeholder="请输入消息内容" class="layui-textarea"></textarea>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<button class="layui-btn" lay-submit lay-filter="formSubmit1">确定</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="layui-tab-item">
+			<form class="layui-form layui-form-pane" action="" method="post" onsubmit="return false;">
+				<div class="layui-form-item">
+					<div id="transfer2"></div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">消息标题</label>
+					<div class="layui-input-block">
+						<input type="text" name="title" required  lay-verify="required" placeholder="请输入消息标题" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">消息内容</label>
+					<div class="layui-input-block">
+						<textarea name="content" required  lay-verify="required" placeholder="请输入消息内容" class="layui-textarea"></textarea>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<button class="layui-btn" lay-submit lay-filter="formSubmit2">确定</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="layui-tab-item">
+			<form class="layui-form layui-form-pane" action="" method="post" onsubmit="return false;">
+				<div class="layui-form-item">
+					<div id="transfer3"></div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">消息标题</label>
+					<div class="layui-input-block">
+						<input type="text" name="title" required  lay-verify="required" placeholder="请输入消息标题" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">消息内容</label>
+					<div class="layui-input-block">
+						<textarea name="content" required  lay-verify="required" placeholder="请输入消息内容" class="layui-textarea"></textarea>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<button class="layui-btn" lay-submit lay-filter="formSubmit3">确定</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="layui-tab-item">
+			<form class="layui-form layui-form-pane" action="" method="post" onsubmit="return false;">
+				<div class="layui-form-item">
+					<div id="transfer4"></div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">消息标题</label>
+					<div class="layui-input-block">
+						<input type="text" name="title" required  lay-verify="required" placeholder="请输入消息标题" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">消息内容</label>
+					<div class="layui-input-block">
+						<textarea name="content" required  lay-verify="required" placeholder="请输入消息内容" class="layui-textarea"></textarea>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<button class="layui-btn" lay-submit lay-filter="formSubmit4">确定</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+</body>
+
+<script>
+	layui.use(['form','layer','element','transfer'], function(){
+		var form = layui.form;
+		var layer = layui.layer;
+		var element = layui.element;
+		var transfer = layui.transfer;
+
+		//页面加载时加载所有穿梭框内容
+		layer.ready(function(){
+			ajaxLoadTran();
+		});
+
+		//加载所有穿梭框
+		function ajaxLoadTran(){
+			$.ajax({
+				url:'/message/laodTrans',
+				type:'post',
+				data:{},
+				async: false,
+				success:function(result){
+					if(result.state == 1){
+						insertTransfer(result.data);
+					}else{
+						layer.msg(result.message,{icon: 5});
+					}
+				},
+			});
+		}
+
+		function insertTransfer(map){
+			transfer.render({
+				elem: '#transfer2'  //绑定元素
+				,title: ['未选中','选中']
+				,showSearch:true
+				,height:400
+				,data:map.roles
+				,id: 'id2' //定义索引
+			});
+			transfer.render({
+				elem: '#transfer3'  //绑定元素
+				,title: ['未选中','选中']
+				,showSearch:true
+				,height:400
+				,data:map.users
+				,id: 'id3' //定义索引
+			});
+			transfer.render({
+				elem: '#transfer4'  //绑定元素
+				,title: ['未选中','选中']
+				,showSearch:true
+				,height:400
+				,data:map.groups
+				,id: 'id4' //定义索引
+			});
+		}
+
+
+		//所有人
+		form.on('submit(formSubmit1)', function(data){
+			$.ajax({
+				url:'/message/addMessageInfo',
+				type:'post',
+				data:{
+					type : 1,
+					frm:data.field
+				},
+				success:function(result){
+					if(result.state == 1){
+						var index = parent.layer.getFrameIndex(window.name);
+						parent.layer.close(index);
+						window.parent.refreshTab();
+					}else{
+						layer.msg(result.message,{icon: 5});
+					}
+				},
+			});
+		});
+
+		//角色
+		form.on('submit(formSubmit2)', function(data){
+			var getData = transfer.getData('id2');
+			if(getData.length<1){
+				return layer.msg("请选择角色",{icon: 5});
+			}
+			$.ajax({
+				url:'/message/addMessageInfo',
+				type:'post',
+				data:{
+					type : 2,
+					frm:data.field,
+					data : JSON.stringify(getData)
+				},
+				success:function(result){
+					if(result.state == 1){
+						var index = parent.layer.getFrameIndex(window.name);
+						parent.layer.close(index);
+						window.parent.refreshTab();
+					}else{
+						layer.msg(result.message,{icon: 5});
+					}
+				},
+			});
+		});
+
+		//用户
+		form.on('submit(formSubmit3)', function(data){
+			var getData = transfer.getData('id3');
+			if(getData.length<1){
+				return layer.msg("请选择用户",{icon: 5});
+			}
+			$.ajax({
+				url:'/message/addMessageInfo',
+				type:'post',
+				data:{
+					type : 3,
+					frm:data.field,
+					data : JSON.stringify(getData)
+				},
+				success:function(result){
+					if(result.state == 1){
+						var index = parent.layer.getFrameIndex(window.name);
+						parent.layer.close(index);
+						window.parent.refreshTab();
+					}else{
+						layer.msg(result.message,{icon: 5});
+					}
+				},
+			});
+		});
+
+		//用户组
+		form.on('submit(formSubmit4)', function(data){
+			var getData = transfer.getData('id4');
+			if(getData.length<1){
+				return layer.msg("请选择用户组",{icon: 5});
+			}
+			$.ajax({
+				url:'/message/addMessageInfo',
+				type:'post',
+				data:{
+					type : 4,
+					frm:data.field,
+					data : JSON.stringify(getData)
+				},
+				success:function(result){
+					if(result.state == 1){
+						var index = parent.layer.getFrameIndex(window.name);
+						parent.layer.close(index);
+						window.parent.refreshTab();
+					}else{
+						layer.msg(result.message,{icon: 5});
+					}
+				},
+			});
+		});
+
+
+
+
+
+
+
+	});
+
+</script>
+<style>
+
+</style>
+</html>

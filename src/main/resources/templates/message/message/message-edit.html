@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>修改内容</title>
+	<script th:src="@{/layui/jquery.min.js}"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}"/>
+	<script th:src="@{/layui/layui.js}"></script>
+	<script th:src="@{/assets/js/templet.js}"></script>
+</head>
+<body>
+
+<form class="layui-form layui-form-pane" action="" method="post" onsubmit="return false;">
+	<input class="layui-input" name="id" type="hidden">
+	<div class="layui-form-item">
+		<label class="layui-form-label">消息标题</label>
+		<div class="layui-input-block">
+			<input type="text" name="title" required  lay-verify="required" placeholder="请输入消息标题" autocomplete="off" class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">消息内容</label>
+		<div class="layui-input-block">
+			<textarea name="content" required  lay-verify="required" placeholder="请输入消息内容" class="layui-textarea"></textarea>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-input-block">
+			<button class="layui-btn" lay-submit lay-filter="formSubmitEdit">确定</button>
+		</div>
+	</div>
+</form>
+
+</body>
+
+<script>
+	layui.use(['form','layer'], function(){
+		var form = layui.form;
+		var layer = layui.layer;
+
+		//监听提交
+		form.on('submit(formSubmitEdit)', function(data){
+			$.ajax({
+				url:'/message/editMessage',
+				type:'post',
+				data:data.field,
+				async: false,
+				beforeSend:function () {},
+				success:function(result){
+					if(result.state == 1){
+						var index = parent.layer.getFrameIndex(window.name);
+						parent.layer.close(index);
+						window.parent.refreshTab();
+					}else{
+						layer.msg(result.message,{icon: 5});
+					}
+				},
+				complete: function () {},
+			});
+		});
+	});
+
+</script>
+<style>
+
+</style>
+</html>

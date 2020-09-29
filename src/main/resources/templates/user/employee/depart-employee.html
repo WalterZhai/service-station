@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>部门人员</title>
+    <script th:src="@{/layui/jquery.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}"/>
+    <script th:src="@{/layui/layui.js}"></script>
+    <script th:src="@{/assets/js/templet.js}"></script>
+</head>
+<body>
+
+    <div class="layui-row layui-col-space20" style="margin:3px 3px;width:98%">
+        <div class="layui-col-xs2 layui-col-sm2 layui-col-md2">
+            <div id="depart-tree"></div>
+        </div>
+        <div class="layui-col-xs10 layui-col-sm10 layui-col-md10">
+            <table class="layui-table" id="tableList" lay-filter="tableList"></table>
+        </div>
+    </div>
+
+</body>
+<script>
+
+    layui.use(['jquery','table','form','util','tree'], function(){
+        var table = layui.table;
+        var $ = layui.$;
+        var layer = layui.layer;
+        var tree = layui.tree;
+        var id = "";
+
+        table.render({
+            elem: '#tableList'
+            ,url: '/employee/departEmpTableData' //数据接口
+            ,title: '部门下人员'
+            ,page: true //开启分页
+            ,limit:10
+            ,cols: [
+                [ //表头
+                    {field: 'id', title: 'ID', width:80 ,hide:true}
+                    ,{field: 'code', title: '工号', width:120}
+                    ,{field: 'name', title: '姓名', width:120}
+                    ,{field: 'usedName', title: '曾用名', width:120}
+                    ,{field: 'sex', title: '性别', width:120}
+                    ,{field: 'mobile', title: '移动电话', width:120}
+                    ,{field: 'depart', title: '部门', width:120,templet:'<div>{{d.depart==null?"":d.depart.name}}</div>'}
+                ]
+            ]
+            ,where:{
+                id : id
+            }
+            ,done: function(res, curr, count){
+                $("[data-field='sex']").children().each(function () {
+                    if ($(this).text() == '0') {
+                        $(this).text('男');
+                    } else if ($(this).text() == '1') {
+                        $(this).text('女');
+                    }
+                });
+            }
+        });
+
+
+        function refreshTab(){
+            table.reload('tableList',{
+                url:'/employee/departEmpTableData',
+                page: true,
+                limit:10,
+                where:{
+                    id : id
+                }
+            });
+        };
+
+
+        layer.ready(function(){
+            ajaxLoadTree();
+        });
+
+
+
+        function ajaxLoadTree() {
+            $.ajax({
+                url:'/depart/ajaxLoadTree',
+                type:'post',
+                data:{},
+                success:function(result){
+                    if(result.state == 1){
+                        laodTree(result.data);
+                    }else{
+                        layer.msg(result.message,{icon: 5});
+                    }
+                }
+            });
+        }
+
+        function laodTree(data){
+            tree.render({
+                elem: '#depart-tree'
+                ,id: 'mtId' //定义索引
+                ,onlyIconControl:true
+                ,accordion:false
+                ,data:data
+                ,click: function(obj){
+                    id = obj.data.id;
+                    refreshTab();
+                }
+            });
+        }
+
+
+    });
+
+
+
+
+
+
+</script>
+<style>
+
+</style>
+</html>

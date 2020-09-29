@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>添加菜单</title>
+	<script th:src="@{/layui/jquery.min.js}"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}"/>
+	<script th:src="@{/layui/layui.js}"></script>
+	<script th:src="@{/assets/js/templet.js}"></script>
+</head>
+<body>
+
+<form class="layui-form layui-form-pane" action="" method="post" onsubmit="return false;">
+	<input name="id" type="hidden">
+	<div class="layui-form-item">
+		<label class="layui-form-label">菜单名</label>
+		<div class="layui-input-block">
+			<input type="text" name="name" required  lay-verify="required" placeholder="请输入菜单名" autocomplete="off" class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">链接</label>
+		<div class="layui-input-block">
+			<input type="text" name="href" placeholder="请输入链接" autocomplete="off" class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">快速ID</label>
+		<div class="layui-input-block">
+			<input type="text" name="selectId" required  lay-verify="required" placeholder="请输入快速ID" autocomplete="off" class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">类型</label>
+		<div class="layui-input-block">
+			<input type="radio" name="type" value="0" title="web" checked>
+			<input type="radio" name="type" value="1" title="app" >
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">图标</label>
+		<div class="layui-input-block">
+			<input type="text" name="icon" placeholder="请输入图标" autocomplete="off" class="layui-input">
+		</div>
+	</div>
+	<a href="https://www.layui.com/doc/element/icon.html" target="_blank" style="">图片浏览...</a>
+	<div class="layui-form-item">
+		<div class="layui-input-block">
+			<button class="layui-btn" lay-submit lay-filter="formSubmit1">立即提交</button>
+		</div>
+	</div>
+</form>
+
+</body>
+
+<script>
+	layui.use(['form','layer'], function(){
+		var form = layui.form;
+		var layer = layui.layer;
+
+		//监听提交
+		form.on('submit(formSubmit1)', function(data){
+			console.log(data.field);
+			$.ajax({
+				url:'/menu/addMenu',
+				type:'post',
+				data:data.field,
+				async: false,
+				beforeSend:function () {},
+				success:function(result){
+					if(result.state == 1){
+						var index = parent.layer.getFrameIndex(window.name);
+						parent.layer.close(index);
+						window.parent.reloadTree();
+					}else{
+						layer.msg(result.message,{icon: 5});
+					}
+				},
+				complete: function () {}
+			});
+		});
+
+
+	});
+
+</script>
+<style>
+
+</style>
+</html>

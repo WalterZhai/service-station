@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>登录</title>
+    <script th:src="@{/layui/jquery.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}"/>
+    <script th:src="@{/layui/layui.js}"></script>
+    <script th:src="@{/assets/js/templet.js}"></script>
+    <script th:src="@{/assets/js/index.js}"></script>
+</head>
+<body>
+
+<div class="layui-input-block"></div>
+<div class="layui-input-block"></div>
+<div class="layui-input-block"></div>
+<div class="layui-bg-green" style="font-size:35px;border-radius:8px;width:160px;margin:0 auto"><span style="margin:0 auto">&nbsp;综合搜索&nbsp;</span></div>
+<div class="layui-input-block"></div>
+<div class="layui-input-block"></div>
+<input type="text" id="search-main" name="search-main"  placeholder="搜索一下" autocomplete="off" class="layui-input" style="width:50%;margin:0 auto;border-radius:8px;border-color:#000"
+       onkeyup="loadInfo()" list="search-list" onchange="searchAndOpen()"><datalist id="search-list"></datalist>
+
+<div class="layui-input-block"></div>
+<div class="layui-input-block"></div>
+<div class="layui-container">
+    <div class="layui-row" id="href-row-id">
+
+    </div>
+</div>
+
+</body>
+<script>
+
+
+    $(document).ready(function(){
+        $.ajax({
+            url:'/menu/ajaxSelectCollect',
+            type:'post',
+            async:false,
+            data:{},
+            success:function(result){
+                if(result.state == 1){
+                    insertHtml(result.data);
+                }else{
+                    layer.msg(result.message,{icon: 5});
+                }
+            }
+        });
+        //添加回车事件
+        $('#search-main').bind('keypress',function(event){
+            if(event.keyCode == "13")
+            {
+                searchAndOpen();
+            }
+        });
+    });
+
+    function searchAndOpen() {
+        $.ajax({
+            url:'/menu/searchAndOpenMenu',
+            type:'post',
+            data:{
+                info:$("#search-main").val()
+            },
+            success:function(result){
+                if(result.state == 1){
+                    var bos = result.data;
+                    for(var i in bos){
+                        parent.openTabByBo(bos[i]);
+                    }
+                    $("#search-main").val("");
+                }else{
+                    layer.msg(result.message,{icon: 5});
+                }
+            }
+        });
+    }
+    
+    function loadInfo() {
+        var info = $("#search-main").val();
+        if(info==""){
+            return;
+        }
+        $.ajax({
+            url:'/menu/loadSearchInfo',
+            type:'post',
+            data:{
+                info:info
+            },
+            success:function(result){
+                if(result.state == 1){
+                    $("#search-list").empty();
+                    var hml = "";
+                    for(var i in result.data){
+                        hml += "<option value='"+result.data[i]+"'></option>";
+                    }
+                    $("#search-list").append(hml);
+                }else{
+                }
+            }
+        });
+    }
+
+    function insertHtml(arr) {
+        var htl = "";
+        for(var i in arr){
+            htl += "<div class='layui-col-md2'> " +
+                "<div class='console-app-group' data-url='"+arr[i].dataurl+"' data-id='"+arr[i].dataid+"' data-title='"+arr[i].datatitle+"'>" +
+                "<i class='console-app-icon layui-icon "+arr[i].iconid+"'></i>" +
+                "<div class='console-app-name'>"+arr[i].datatitle+"</div>" +
+                "</div>" +
+                "</div>";
+        }
+        $("#href-row-id").append(htl);
+        onClickMethd();
+    }
+
+    function onClickMethd() {
+        $('.console-app-group').on('click', function () {
+            var dataid = $(this)
+            parent.openTab(dataid);
+        });
+    }
+
+
+
+</script>
+<style>
+    .console-app-group {
+        padding: 16px;
+        border-radius: 4px;
+        text-align: center;
+        background-color: #E4EAF7;
+        cursor: pointer;
+        display: block;
+        margin: 0 10px;
+    }
+
+    .console-app-group .console-app-icon {
+        width: 32px;
+        height: 32px;
+        line-height: 32px;
+        margin-bottom: 6px;
+        display: inline-block;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        font-size: 32px;
+        color: #69c0ff;
+    }
+</style>
+</html>

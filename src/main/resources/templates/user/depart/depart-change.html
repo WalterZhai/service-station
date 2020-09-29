@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>部门更换</title>
+    <script th:src="@{/layui/jquery.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}"/>
+    <script th:src="@{/layui/layui.js}"></script>
+    <script th:src="@{/assets/js/templet.js}"></script>
+</head>
+<body>
+
+<div id="depart-tree1"></div>
+<label class="layui-form-label">部门</label><input type="text" id="depart" required  lay-verify="required" placeholder="未选择部门" autocomplete="off" class="layui-input" style="width: 250px">
+<div class="layui-input-block"><button class="layui-btn submit-last">确定</button></div>
+</body>
+<script>
+
+    layui.use(['jquery','form','tree','layer'], function(){
+        var $ = layui.$;
+        var layer = layui.layer;
+        var tree = layui.tree;
+        var id = '';
+        var selectid = '';
+
+        window.ajaxLoadTree1 = function (sid) {
+            id = sid;
+            $.ajax({
+                url:'/depart/ajaxLoadTree',
+                type:'post',
+                data:{},
+                success:function(result){
+                    if(result.state == 1){
+                        laodTree(result.data);
+                    }else{
+                        layer.msg(result.message,{icon: 5});
+                    }
+                }
+            });
+        }
+
+        function laodTree(data){
+            tree.render({
+                elem: '#depart-tree1'
+                ,id: 'mtId' //定义索引
+                ,onlyIconControl:true
+                ,accordion:false
+                ,data:data
+                ,click: function(obj){
+                    selectid = obj.data.id;
+                    $('#depart').val(obj.data.title);
+                }
+            });
+        }
+
+        $('.submit-last').on('click', function () {
+            $.ajax({
+                url:'/depart/ajaxSetPdepart',
+                type:'post',
+                data:{
+                    id:id,
+                    selectid:selectid
+                },
+                success:function(result){
+                    if(result.state == 1){
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                        window.parent.refreshTab();
+                    }else{
+                        layer.msg(result.message,{icon: 5});
+                    }
+                }
+            });
+        });
+
+    });
+
+
+
+
+
+
+</script>
+<style>
+
+</style>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>售后服务站系统</title>
+	<link rel="icon" type="image/x-icon" th:href="@{/assets/images/favicon.ico}">
+	<link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}"/>
+	<script th:src="@{/layui/layui.js}"></script>
+	<script th:src="@{/assets/js/index.js}"></script>
+</head>
+<body>
+
+
+<div class="layui-layout layui-layout-admin">
+	<!-- 头部 -->
+	<div class="layui-header">
+		<div class="layui-logo logo-div">
+			<img src="/static/assets/images/favicon.ico"/>
+			<cite class="logo-cite">通华服务站</cite>
+		</div>
+		<ul class="layui-nav layui-layout-left logo-left" style="left:180px">
+			<li class="layui-nav-item" lay-unselect>
+				<a class="kit-side-fold" title="侧边伸缩"><i id="logo-left-i" class="layui-icon layui-icon-shrink-right"></i></a>
+			</li>
+		</ul>
+		<ul class="layui-nav layui-layout-right">
+			<li class="layui-nav-item" lay-unselect>
+				<a title="主页" class="site-main-active" data-url="topage?url=home.html" data-id="station_home" data-title="主页">
+					<i class="layui-icon layui-icon-home"></i>
+				</a>
+			</li>
+			<li class="layui-nav-item" lay-unselect>
+				<a title="在线人员" class="site-main-active" data-url="topage?url=user/index/online-user.html" data-id="online-user" data-title="在线人员">
+					<i class="layui-icon layui-icon-username"></i>
+				</a>
+			</li>
+			<li class="layui-nav-item" lay-unselect>
+				<a title="收藏夹" class="site-main-active" data-url="topage?url=user/index/user-collect.html" data-id="user-collect" data-title="收藏夹">
+					<i class="layui-icon layui-icon-star"></i>
+				</a>
+			</li>
+			<li class="layui-nav-item" lay-unselect>
+				<a title="消息" class="message-notice">
+					<i class="layui-icon layui-icon-notice" id="message-notice-index"></i>
+				</a>
+			</li>
+			<li class="layui-nav-item layui-hide-xs" lay-unselect>
+				<a data-toggle="fullscreen" title="全屏"><i id="logo-fullscreen-i" class="layui-icon layui-icon-screen-full"></i></a>
+			</li>
+			<li class="layui-nav-item" lay-unselect>
+				<a>
+					<cite th:text="${session.user.name}"></cite>
+				</a>
+				<dl class="layui-nav-child">
+					<dd lay-unselect><a class="site-main-active" data-url="topage?url=/user/index/user-info.html" data-id="user-info" data-title="个人中心">个人中心</a></dd>
+					<dd lay-unselect><a class="edit-password">修改密码</a></dd>
+					<hr>
+					<dd lay-unselect><a th:href="@{/logout}">退出</a></dd>
+				</dl>
+			</li>
+		</ul>
+	</div>
+
+	<div class="layui-side layui-bg-black">
+		<div class="layui-side-scroll">
+			<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+			<ul th:each="menu:${menus}" class="layui-nav layui-nav-tree" >
+				<li class="layui-nav-item" lay-unselect>
+					<a class="" href="javascript:;"><i th:class="'layui-icon '+${menu.iconid}"></i> <span >[[${menu.datatitle}]]</span></a>
+					<dl th:each="child:${menu.childrenMenuBo}" class="layui-nav-child">
+						<dd><a href="javascript:;" class="site-main-active" th:attr="data-id=${child.dataid},data-url=${child.dataurl},data-title=${child.datatitle}" ><i th:class="'layui-icon '+${child.iconid}"></i><span >[[${child.datatitle}]]</span></a></dd>
+					</dl>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<!-- 主体部分 -->
+	<div class="layui-body" >
+		<div class="layui-tab layui-tab-brief" lay-allowClose="true" lay-filter="main-tab">
+			<ul class="layui-tab-title layui-tab-close">
+<!--				<li >主页</li>-->
+			</ul>
+			<ul class="rightmenu layui-btn-group" style="display: none;position: absolute;">
+                <li data-type="refreshthis"><button type="button" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon layui-icon-refresh"></i>刷新当前</button></li>
+				<li data-type="closethis"><button type="button" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon layui-icon-close-fill"></i>关闭当前</button></li>
+                <li data-type="closeothers"><button type="button" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon layui-icon-fonts-del"></i>关闭其他</button></li>
+				<li data-type="closeall"><button type="button" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon layui-icon-unlink"></i>关闭所有</button></li>
+			</ul>
+			<div class="layui-tab-content">
+<!--				<div class="layui-tab-item">1</div>-->
+			</div>
+		</div>
+	</div>
+
+	<!-- 底部 -->
+	<div class="layui-footer layui-text">
+		版权所有:<a href="http://www.chinatrailer.com/index.html" target="_blank">扬州中集通华专用车有限公司</a>
+	</div>
+</div>
+
+<!-- 加载动画 -->
+<div class="page-loading">
+	<div class="ball-loader">
+		<span></span><span></span><span></span><span></span>
+	</div>
+</div>
+
+</body>
+</html>
+<script>
+
+	layui.use('element', function() {
+
+	});
+
+</script>
+<style type="text/css">
+</style>
+
+
+

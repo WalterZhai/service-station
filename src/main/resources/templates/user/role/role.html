@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>角色管理</title>
+    <script th:src="@{/layui/jquery.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}"/>
+    <script th:src="@{/layui/layui.js}"></script>
+    <script th:src="@{/assets/js/templet.js}"></script>
+</head>
+<body>
+
+<form class="layui-form toolbar">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" name="code" placeholder="请输入角色编码" autocomplete="off" class="layui-input" id="searchCode">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" name="name" placeholder="请输入角色名称" autocomplete="off" class="layui-input" id="searchName">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline" style="width: auto;">
+                <button type="button" class="layui-btn table-refresh"><i class="layui-icon layui-icon-search"></i>查询</button>
+                <button type="button" class="layui-btn table-add"><i class="layui-icon layui-icon-add-1"></i>添加</button>
+                <button type="button" class="layui-btn layui-btn-danger table-dels"><i class="layui-icon layui-icon-delete"></i>批量删除</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- 数据表格 -->
+<table class="layui-table" id="tableList" lay-filter="tableList"></table>
+
+<script type="text/html" id="bar">
+    <button type="button" class="layui-btn layui-btn-xs" lay-event="row-edit"><i class="layui-icon layui-icon-edit"></i>编辑</button>
+    <button type="button" class="layui-btn layui-btn-xs layui-btn-danger" lay-event="row-delete"><i class="layui-icon layui-icon-delete"></i>删除</button>
+    <button type="button" class="layui-btn layui-btn-xs layui-btn-normal" lay-event="row-relMenu"><i class="layui-icon layui-icon-share"></i>菜单关联</button>
+    <button type="button" class="layui-btn layui-btn-xs layui-btn-normal" lay-event="row-relUser"><i class="layui-icon layui-icon-share"></i>用户关联</button>
+</script>
+
+</body>
+<script>
+
+    layui.use(['jquery','table','form','laytpl','util'], function(){
+        var form = layui.form;
+        var table = layui.table;
+        var laytpl = layui.laytpl;
+        var $ = layui.$;
+        var layer = layui.layer;
+
+        table.render({
+            elem: '#tableList'
+            ,url: '/role/tableData' //数据接口
+            ,title: '角色表'
+            ,page: true //开启分页
+            ,limit:10
+            //,toolbar: 'false' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+            //,totalRow: true //开启合计行
+            ,cols: [
+                [ //表头
+                {checkbox : true}
+                ,{field: 'id', title: 'ID', width:80 ,hide:true}
+                ,{field: 'code', title: '角色编码', width:120}
+                ,{field: 'name', title: '角色名称', width:120}
+                ,{field: '',title: '功能操作',width:400,toolbar:'#bar'}
+                ]
+            ]
+            ,where:{
+                searchCode : $("#searchCode").val(),
+                searchName : $("#searchName").val()
+            }
+        });
+
+
+        //重新加载表格
+        $('.table-refresh').on('click', function () {
+            refreshTab();
+        });
+
+        //刷新表格
+        window.refreshTab  = function(){
+            table.reload('tableList',{
+                url:'/role/tableData',
+                page: true,
+                limit:10,
+                where:{
+                    searchCode : $("#searchCode").val(),
+                    searchName : $("#searchName").val()
+                }
+            });
+        };
+
+        //添加新角色
+        $('.table-add').on('click', function () {
+            layer.open({
+                type : 1,
+                maxmin : true,
+                title : '添加角色',
+                area : [ '300px', '250px' ],
+                fix : false,
+                content :
+                    '<form class="layui-form layui-form-pane" action="" method="post" onsubmit="return false;">'+
+                    '<div class="layui-form-item">' +
+                    '<input type="text" name="code" required  value="ROLE_" lay-verify="required" placeholder="请输入角色编码（以ROLE_开头）" autocomplete="off" class="layui-input">' +
+                    '</div>'+
+                    '<div class="layui-form-item">' +
+                    '<input type="text" name="name" required  lay-verify="required" placeholder="请输入角色名称" autocomplete="off" class="layui-input">' +
+                    '</div>'+
+                    '<div class="layui-form-item" style="text-align: center">' +
+                    '<div class="layui-inline">'+
+                    '<button class="layui-btn" lay-submit lay-filter="formSubmit">立即提交</button>'+
+                    '</div>'+
+                    '</div>'+
+                    '</form>',
+                success: function(layero, index){
+                    //添加角色提交
+                    form.on('submit(formSubmit)', function(data){
+                        $.ajax({
+                            url:'/role/addRole',
+                            type:'post',
+                            data:data.field,
+                            async: false,
+                            success:function(result){
+                                if(result.state == 1){
+                                    layer.close(index);
+                                    refreshTab();
+                                }else{
+                                    layer.msg(result.message,{icon: 5});
+                                }
+                            }
+                        });
+                    });
+                }
+            });
+
+        });
+
+
+
+        //批量删除
+        $('.table-dels').on('click', function () {
+            var checkStatus = table.checkStatus('tableList')
+                ,data = checkStatus.data;
+            layer.confirm('确定要删除吗？', {
+                btn: ['确定', '取消']
+            },function(index, layero){
+                $.ajax({
+                    url:'/role/delRoles',
+                    type:'post',
+                    data:{
+                        arrs:JSON.stringify(data)
+                    },
+                    success:function(result){
+                        if(result.state == 1){
+                            layer.close(index);
+                            refreshTab();
+                        }else{
+                            layer.close(index);
+                            layer.msg(result.message,{icon: 5});
+                        }
+                    }
+                });
+            }, function(index){
+                layer.close(index);
+            });
+        });
+
+        //行中按钮
+        table.on('tool(tableList)',function (obj) {
+            var data = obj.data;
+            if(obj.event==='row-edit'){
+                rowEdit(data);
+            }else if(obj.event==='row-delete'){
+                rowDelete(data);
+            }else if(obj.event==='row-relMenu'){
+                roleRelMenu(data);
+            }else if(obj.event==='row-relUser'){
+                roleRelUser(data);
+            }
+
+        });
+
+        //行中按钮-编辑
+        function rowEdit(obj) {
+            layer.open({
+                type : 1,
+                maxmin : true,
+                title : '修改角色',
+                area : [ '300px', '250px' ],
+                fix : false,
+                content :
+                    '<form class="layui-form layui-form-pane" action="" method="post" onsubmit="return false;">'+
+                    '<input name="id" type="hidden" >'+
+                    '<div class="layui-form-item">' +
+                    '<input type="text" name="code" required  value="ROLE_" lay-verify="required" placeholder="请输入角色编码（以ROLE_开头）" autocomplete="off" class="layui-input">' +
+                    '</div>'+
+                    '<div class="layui-form-item">' +
+                    '<input type="text" name="name" required  lay-verify="required" placeholder="请输入角色名称" autocomplete="off" class="layui-input">' +
+                    '</div>'+
+                    '<div class="layui-form-item" style="text-align: center">' +
+                    '<div class="layui-inline">'+
+                    '<button class="layui-btn" lay-submit lay-filter="formSubmitEdit">立即提交</button>'+
+                    '</div>'+
+                    '</div>'+
+                    '</form>',
+                success: function(layero, index){
+                    layero.find("input[name='id']").val(obj.id);
+                    layero.find("input[name='code']").val(obj.code);
+                    layero.find("input[name='name']").val(obj.name);
+                    //添加角色提交
+                    form.on('submit(formSubmitEdit)', function(data){
+                        $.ajax({
+                            url:'/role/editRole',
+                            type:'post',
+                            data:data.field,
+                            async: false,
+                            success:function(result){
+                                if(result.state == 1){
+                                    layer.close(index);
+                                    refreshTab();
+                                }else{
+                                    layer.msg(result.message,{icon: 5});
+                                }
+                            }
+                        });
+                    });
+                }
+            });
+        }
+        //行中按钮-删除
+        function rowDelete(obj) {
+            layer.confirm('确定要删除吗？', {
+                btn: ['确定', '取消']
+            },function(index, layero){
+                $.ajax({
+                    url:'/role/delRole',
+                    type:'post',
+                    data:{
+                        obj:JSON.stringify(obj)
+                    },
+                    beforeSend:function () {},
+                    success:function(result){
+                        if(result.state == 1){
+                            layer.close(index);
+                            refreshTab();
+                        }else{
+                            layer.close(index);
+                            layer.msg(result.message,{icon: 5});
+                        }
+                    },
+                    complete: function () {},
+                });
+            }, function(index){
+                layer.close(index);
+            });
+        }
+
+        //行中角色关联菜单
+        function roleRelMenu(data) {
+            layer.open({
+                type : 2,
+                maxmin : true,
+                title : '角色关联菜单',
+                area : ['80%','95%'],
+                fix : false,
+                content : '/topage?url=user/role/role-rel-menu.html',
+                success:function(layero,index){
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    iframeWin.ajaxLoadTree(data.id);
+                }
+            });
+        }
+
+        function roleRelUser(data) {
+            layer.open({
+                type : 2,
+                maxmin : true,
+                title : '角色关联用户',
+                area : ['80%','95%'],
+                fix : false,
+                content : '/topage?url=user/role/role-rel-user.html',
+                success:function(layero,index){
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    iframeWin.ajaxLoadTransfer(data.id);
+                }
+            });
+        }
+
+
+    });
+
+
+
+
+
+</script>
+<style>
+
+</style>
+</html>

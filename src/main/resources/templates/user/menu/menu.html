@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>菜单管理</title>
+    <script th:src="@{/layui/jquery.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}"/>
+    <script th:src="@{/layui/layui.js}"></script>
+    <script th:src="@{/assets/js/templet.js}"></script>
+</head>
+<body>
+
+    <div class="layui-row layui-col-space20" style="margin:3px 3px;width:98%">
+        <div class="layui-col-xs2 layui-col-sm2 layui-col-md2">
+            <div id="menu-tree"></div>
+        </div>
+        <div class="layui-col-xs10 layui-col-sm10 layui-col-md10">
+            <form class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <div class="layui-input-inline" style="width: auto;">
+                            <button type="button" class="layui-btn table-refresh"><i class="layui-icon layui-icon-search"></i>刷新树</button>
+                        </div>
+                        <div class="layui-input-inline" style="width: auto;">
+                            <button type="button" class="layui-btn menu-add"><i class="layui-icon layui-icon-add-1"></i>添加子菜单</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <table class="layui-table" id="tableList" lay-filter="tableList"></table>
+        </div>
+    </div>
+
+    <script type="text/html" id="bar">
+        <button type="button" class="layui-btn layui-btn-xs" lay-event="row-edit"><i class="layui-icon layui-icon-edit"></i>修改</button>
+        <button type="button" class="layui-btn layui-btn-xs" lay-event="row-up"><i class="layui-icon layui-icon-upload-circle"></i></button>
+        <button type="button" class="layui-btn layui-btn-xs" lay-event="row-down"><i class="layui-icon layui-icon-download-circle"></i></button>
+        <button type="button" class="layui-btn layui-btn-xs layui-btn-danger" lay-event="row-delete"><i class="layui-icon layui-icon-delete"></i>删除</button>
+    </script>
+
+</body>
+<script>
+
+    layui.use(['jquery','table','form','util','tree'], function(){
+        var form = layui.form;
+        var table = layui.table;
+        var $ = layui.$;
+        var layer = layui.layer;
+        var tree = layui.tree;
+        var id = "";
+
+        table.render({
+            elem: '#tableList'
+            ,url: '/menu/tableData' //数据接口
+            ,title: '子菜单明细表'
+            ,page: true //开启分页
+            ,limit:10
+            ,cols: [
+                [ //表头
+                    {field: 'id', title: 'ID', width:80 ,hide:true}
+                    ,{field: 'name', title: '菜单名', width:150}
+                    ,{field: 'pmenu', title: '父菜单', width:150,templet:'<div>{{d.pmenu==null?"":d.pmenu.name}}</div>'}
+                    ,{field: 'href', title: '链接', width:200}
+                    ,{field: 'leve', title: '等级', width:80}
+                    ,{field: 'seq', title: '同级别顺序', width:100}
+                    ,{field: 'type', title: '类型', width:80}
+                    ,{field: 'uda2', title: '快速ID', width:120}
+                    ,{field: 'uda1', title: '图标ID', width:120}
+                    ,{field: '',title: '功能操作',width:240,toolbar:'#bar'}
+                ]
+            ]
+            ,where:{
+                id : id
+            }
+            ,done: function(res, curr, count){
+                $("[data-field='type']").children().each(function () {
+                    if ($(this).text() == '0') {
+                        $(this).text('web');
+                    } else if ($(this).text() == '1') {
+                        $(this).text('app');
+                    }
+                });
+            }
+        });
+
+
+        //重新加载表格
+        $('.table-refresh').on('click', function () {
+            id = '';
+            ajaxLoadTree();
+            refreshTab();
+        });
+
+        //刷新表格
+        window.refreshTab  = function(){
+            table.reload('tableList',{
+                url:'/menu/tableData',
+                page: true,
+                limit:10,
+                where:{
+                    id : id
+                }
+            });
+        };
+
+
+        layer.ready(function(){
+            ajaxLoadTree();
+        });
+
+
+
+        function ajaxLoadTree() {
+            $.ajax({
+                url:'/menu/ajaxLoadTree',
+                type:'post',
+                data:{},
+                success:function(result){
+                    if(result.state == 1){
+                        laodTree(result.data);
+                    }else{
+                        layer.msg(result.message,{icon: 5});
+                    }
+                }
+            });
+        }
+
+        function laodTree(data){
+            tree.render({
+                elem: '#menu-tree'
+                ,id: 'mtId' //定义索引
+                ,onlyIconControl:true
+                ,accordion:false
+                ,data:data
+                ,click: function(obj){
+                    id = obj.data.id;
+                    refreshTab();
+                }
+            });
+        }
+
+        //添加新菜单
+        $('.menu-add').on('click', function () {
+            $.ajax({
+                url:'/menu/treeAddJudge',
+                type:'post',
+                data:{
+                    id : id
+                },
+                success:function(result){
+                    if(result.state == 1){
+                        treeAddLit(id);
+                    }else{
+                        layer.msg(result.message,{icon: 5});
+                    }
+                }
+            });
+        });
+
+        function treeAddLit(pid) {
+            layer.open({
+                type : 2,
+                maxmin : true,
+                title : '添加菜单',
+                area : [ '500px', '400px' ],
+                fix : false,
+                content : '/topage?url=user/menu/menu-add.html',
+                success:function(layero,index){
+                    var body = layer.getChildFrame('body', index);
+                    body.find("input[name='id']").val(pid);
+                }
+            });
+        }
+
+
+        window.reloadTree =function(){
+            // id = "";
+            // //tree.reload('mtId', {});
+            // ajaxLoadTree();
+            refreshTab();
+        }
+
+
+        //行中按钮
+        table.on('tool(tableList)',function (obj) {
+            var data = obj.data;
+            if(obj.event==='row-edit'){
+                rowEdit(data);
+            }else if(obj.event==='row-delete'){
+                rowDelete(data);
+            }else if(obj.event==='row-up'){
+                rowUp(data);
+            }else if(obj.event==='row-down'){
+                rowDown(data);
+            }
+        });
+
+        //行中按钮-编辑
+        function rowEdit(obj) {
+            layer.open({
+                type : 2,
+                maxmin : true,
+                title : '修改菜单信息',
+                area : [ '500px', '400px' ],
+                fix : false,
+                content : '/topage?url=user/menu/menu-edit.html',
+                success:function(layero,index){
+                    var body = layer.getChildFrame('body', index);
+                    body.find("input[name='id']").val(obj.id);
+                    body.find("input[name='name']").val(obj.name);
+                    body.find("input[name='href']").val(obj.href);
+                    body.find("input[name='selectId']").val(obj.uda2);
+                    body.find("input[name='type']").val(obj.type);
+                    body.find("input[name='icon']").val(obj.uda1);
+                }
+            });
+        }
+        //行中按钮-删除
+        function rowDelete(obj) {
+            layer.confirm('确定要删除吗？', {
+                btn: ['确定', '取消']
+            },function(index, layero){
+                $.ajax({
+                    url:'/menu/delMenu',
+                    type:'post',
+                    data:{
+                        obj:JSON.stringify(obj)
+                    },
+                    success:function(result){
+                        if(result.state == 1){
+                            layer.close(index);
+                            reloadTree();
+                        }else{
+                            layer.close(index);
+                            layer.msg(result.message,{icon: 5});
+                        }
+                    },
+                });
+            }, function(index){
+                layer.close(index);
+            });
+        }
+
+        function rowUp(obj) {
+            $.ajax({
+                url:'/menu/rowUp',
+                type:'post',
+                data:{
+                    obj:JSON.stringify(obj)
+                },
+                success:function(result){
+                    if(result.state == 1){
+                        reloadTree();
+                    }else{
+                        layer.msg(result.message,{icon: 5});
+                    }
+                },
+            });
+        }
+        
+        function rowDown(obj) {
+            $.ajax({
+                url:'/menu/rowDown',
+                type:'post',
+                data:{
+                    obj:JSON.stringify(obj)
+                },
+                success:function(result){
+                    if(result.state == 1){
+                        reloadTree();
+                    }else{
+                        layer.msg(result.message,{icon: 5});
+                    }
+                },
+            });
+        }
+
+    });
+
+
+
+
+
+
+</script>
+<style>
+
+</style>
+</html>

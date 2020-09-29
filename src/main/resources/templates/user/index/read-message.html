@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>读取信息</title>
+	<script th:src="@{/layui/jquery.min.js}"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}"/>
+	<script th:src="@{/layui/layui.js}"></script>
+	<script th:src="@{/assets/js/templet.js}"></script>
+</head>
+<body>
+<button type="button" class="layui-btn layui-btn-danger layui-btn-sm message-refresh" style="margin-top: 10px;margin-left: 20px"><i class="layui-icon layui-icon-note"></i>全部已读</button>
+
+	<table class="layui-table" id="tableList" lay-filter="tableList"></table>
+
+	<script type="text/html" id="bar">
+		<button type="button" class="layui-btn layui-btn-xs" lay-event="row-read"><i class="layui-icon layui-icon-read"></i>查看明细</button>
+	</script>
+
+</body>
+
+<script>
+	layui.use(['form','layer','table'], function(){
+		var form = layui.form;
+		var layer = layui.layer;
+		var table = layui.table;
+
+		table.render({
+			elem: '#tableList'
+			,url: '/message/tableDataMessageInfo' //数据接口
+			,title: '消息表'
+			,height:'500'
+			,page: true //开启分页
+			,limit:10
+			,cols: [
+				[ //表头
+					{field: 'id', title: 'ID', width:80 ,hide:true}
+					,{field: 'message', title: '消息标题', width:150,templet:'<div>{{d.message.mesTitle}}</div>'}
+					,{field: 'message', title: '消息内容', width:150,templet:'<div>{{d.message.mesContent}}</div>'}
+					,{field: 'isRead', title: '是否已读', width:150}
+					,{field: '',title: '功能操作',width:150,toolbar:'#bar'}
+				]
+			]
+			,done: function(res, curr, count){
+				$("[data-field='isRead']").children().each(function () {
+					if ($(this).text() == '0') {
+						$(this).text('未读');
+					} else if ($(this).text() == '1') {
+						$(this).text('已读');
+					}
+				});
+			}
+		});
+
+		function refreshTab(){
+			table.reload('tableList',{
+				url:'/message/tableDataMessageInfo',
+				page: true,
+				limit:10,
+				height:'500'
+			});
+		};
+
+
+
+		//行中按钮
+		table.on('tool(tableList)',function (obj) {
+			var data = obj.data;
+			if(obj.event==='row-read'){
+				rowRead(data);
+			}
+		});
+
+		function rowRead(obj) {
+			layer.open({
+				type : 2,
+				maxmin : true,
+				title : '消息查看',
+				area : ['500px','400px'],
+				fix : false,
+				content : '/topage?url=user/index/read-message-deatil.html',
+				success:function(layero,index){
+					var body = layer.getChildFrame('body', index);
+					body.find("input[name='title']").val(obj.message.mesTitle);
+					body.find("textarea[name='content']").val(obj.message.mesContent);
+					noteMessage(obj);
+				}
+			});
+
+		}
+
+		function noteMessage(obj) {
+			$.ajax({
+				url:'/message/messageRead',
+				type:'post',
+				data:{
+					obj:JSON.stringify(obj)
+				},
+				success:function(result){
+					if(result.state == 1){
+						refreshTab();
+					}else{
+						layer.msg(result.message,{icon: 5});
+					}
+				},
+			});
+		}
+
+		$('.message-refresh').on('click', function () {
+			$.ajax({
+				url:'/message/messageReadAll',
+				type:'post',
+				data:{},
+				success:function(result){
+					if(result.state == 1){
+						refreshTab();
+					}else{
+						layer.msg(result.message,{icon: 5});
+					}
+				},
+			});
+		});
+
+	});
+
+</script>
+<style>
+	.layui-input {
+		width:150px
+	}
+</style>
+</html>

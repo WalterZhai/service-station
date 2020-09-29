@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>收藏夹</title>
+	<script th:src="@{/layui/jquery.min.js}"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}"/>
+	<script th:src="@{/layui/layui.js}"></script>
+	<script th:src="@{/assets/js/templet.js}"></script>
+</head>
+<body>
+<div id="menu-tree"></div>
+<div class="layui-input-block"></div>
+<div class="layui-input-block">
+	<button class="layui-btn tree-confirm" >确定</button>
+</div>
+
+</body>
+
+<script>
+	layui.use(['form','layer','tree'], function(){
+		var form = layui.form;
+		var layer = layui.layer;
+		var tree = layui.tree;
+		var $ = layui.jquery;
+
+		layer.ready(function(){
+			loadAjaxTreeData();
+		});
+
+		function loadAjaxTreeData() {
+			$.ajax({
+				url:'/menu/ajaxUserLoadTreeChecked',
+				type:'post',
+				data:{},
+				success:function(result){
+					if(result.state == 1){
+						laodTree(result.data);
+					}else{
+						layer.msg(result.message,{icon: 5});
+					}
+				}
+			});
+		}
+
+		function laodTree(data){
+			tree.render({
+				elem: '#menu-tree'
+				,id: 'mtId' //定义索引
+				,onlyIconControl:true
+				,accordion:false
+				,showCheckbox:true
+				,data:data
+			});
+		}
+
+		//确定
+		$('.tree-confirm').on('click', function () {
+			var checkData = tree.getChecked('mtId');
+			$.ajax({
+				url:'/menu/saveMenuCollect',
+				type:'post',
+				data:{
+					treeData:JSON.stringify(checkData)
+				},
+				success:function(result){
+					if(result.state == 1){
+						layer.msg(result.data,{icon: 1});
+					}else{
+						layer.msg(result.message,{icon: 5});
+					}
+				}
+			});
+		});
+
+
+
+	});
+
+</script>
+<style>
+
+</style>
+</html>
