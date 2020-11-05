@@ -86,7 +86,7 @@
             elem: '#tableList'
             ,url: '/user/tableData' //数据接口
             ,title: '用户表'
-            ,page: true //开启分页
+            ,page: {curr:1} //开启分页
             ,limit:10
             //,toolbar: 'false' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
             //,totalRow: true //开启合计行
@@ -120,7 +120,7 @@
             var searchName = $("#searchName").val();
             table.reload('tableList',{
                 url:'/user/tableData',
-                page: true,
+                page: {curr:1}, //开启分页
                 limit:10,
                 where:{
                     searchName:searchName
@@ -274,6 +274,53 @@
                 }
             });
         }
+
+
+        // //导出excel
+        // $('.table-export').on('click', function () {
+        //
+        //     //根据传入tableID获取表头
+        //     var headers = $("div[lay-id=tableList] .layui-table-box table").get(0);
+        //     var htrs = Array.from(headers.querySelectorAll('tr'));
+        //     var titles = {};
+        //     for (var j = 0; j < htrs.length; j++) {
+        //         var hths = Array.from(htrs[j].querySelectorAll("th"));
+        //         for (var i = 0; i < hths.length; i++) {
+        //             var clazz = hths[i].getAttributeNode('class').value;
+        //             if (clazz != ' layui-table-col-special' && clazz != 'layui-hide') {
+        //                 //排除居左、具有、隐藏字段
+        //                 //修改:默认字段data-field+i,兼容部分数据表格中不存在data-field值的问题
+        //                 titles['data-field' + i] = hths[i].innerText;
+        //             }
+        //         }
+        //     }
+        //     //根据传入tableID获取table内容
+        //     var bodys = $("div[lay-id=tableList] .layui-table-box table").get(1);
+        //     var btrs = Array.from(bodys.querySelectorAll("tr"))
+        //     var bodysArr = new Array();
+        //     for (var j = 0; j < btrs.length; j++) {
+        //         var contents = {};
+        //         var btds = Array.from(btrs[j].querySelectorAll("td"));
+        //         for (var i = 0; i < btds.length; i++) {
+        //             for (var key in titles) {
+        //                 //修改:默认字段data-field+i,兼容部分数据表格中不存在data-field值的问题
+        //                 var field = 'data-field' + i;
+        //                 if (field === key) {
+        //                     //根据表头字段获取table内容字段
+        //                     contents[field] = btds[i].innerText;
+        //                 }
+        //             }
+        //         }
+        //         bodysArr.push(contents)
+        //     }
+        //     //将标题行置顶添加到数组
+        //     bodysArr.unshift(titles);
+        //     //导出excel
+        //     excel.exportExcel({
+        //         sheet1: bodysArr
+        //     }, '维修单汇总信息表.xlsx', 'xlsx');
+        // });
+
 
     });
 

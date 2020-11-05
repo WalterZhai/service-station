@@ -52,7 +52,7 @@
             elem: '#tableList'
             ,url: '/depart/tableData' //数据接口
             ,title: '子部门明细表'
-            ,page: true //开启分页
+            ,page: {curr:1} //开启分页
             ,limit:10
             ,cols: [
                 [ //表头
@@ -80,7 +80,7 @@
         window.refreshTab  = function(){
             table.reload('tableList',{
                 url:'/depart/tableData',
-                page: true,
+                page: {curr:1},
                 limit:10,
                 where:{
                     id : id

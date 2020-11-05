@@ -1,0 +1,73 @@
+2020-11-05 16:27:03.600  INFO 9524 --- [restartedMain] c.c.s.ServiceStationApplication          : Starting ServiceStationApplication on yzthchenwei with PID 9524 (D:\tht_service_station\target\classes started by 01382839 in D:\tht_service_station)
+2020-11-05 16:27:03.605  INFO 9524 --- [restartedMain] c.c.s.ServiceStationApplication          : No active profile set, falling back to default profiles: default
+2020-11-05 16:27:03.671  INFO 9524 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-11-05 16:27:03.671  INFO 9524 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-11-05 16:27:04.494  INFO 9524 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2020-11-05 16:27:04.509  INFO 9524 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 6ms. Found 0 repository interfaces.
+2020-11-05 16:27:04.509  INFO 9524 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2020-11-05 16:27:04.587  INFO 9524 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 78ms. Found 8 repository interfaces.
+2020-11-05 16:27:05.310  INFO 9524 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$ba4bc797] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-11-05 16:27:05.879  INFO 9524 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2020-11-05 16:27:05.902  INFO 9524 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-11-05 16:27:05.902  INFO 9524 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet Engine: Apache Tomcat/9.0.12
+2020-11-05 16:27:05.911  INFO 9524 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: [C:\Program Files\Java\jdk1.8.0_151\bin;C:\Windows\Sun\Java\bin;C:\Windows\system32;C:\Windows;D:\developmentTools\01_idea\idea_2019\IntelliJ IDEA 2019.2\jbr\\bin;D:\developmentTools\01_idea\idea_2019\IntelliJ IDEA 2019.2\jbr\\bin\server;E:\product\11.2.0\tg_1\bin;C:\ProgramData\Oracle\Java\javapath;D:\app\01381932\product\11.2.0\dbhome_1\bin;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Java\jdk1.8.0_151\lib;C:\Program Files\Java\jdk1.8.0_151\bin;C:\FPC\3.0.2\bin\i386-Win32;C:\Program Files\dotnet\;D:\eclipse\jboss\jboss-as-7.1.1.Final\bin;G:\SVN\TortoiseSVN\bin;D:\devenv\git\Git\cmd;D:\eclipse\jboss\jboss-as-7.1.1.Final\bin;C:\Program Files\Java\jre1.8.0_151\bin;G:\Siemens\Vis113\Products\Mockup\ClearanceDB;D:\nodejs\;%ANDROID_SDK_ROOT%\platform-tools;%ANDROID_SDK_ROOT%\tools\bin;%ANDROID_SDK_ROOT%\build-tools;G:\gradle-5.5.1\bin;D:\developmentTools\02_maven\apache-maven-3.5.2\bin;C:\Users\01382839\AppData\Roaming\npm;G:\visual code\Microsoft VS Code\bin;.]
+2020-11-05 16:27:06.088  INFO 9524 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-11-05 16:27:06.089  INFO 9524 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 2418 ms
+2020-11-05 16:27:06.103  INFO 9524 --- [restartedMain] c.c.s.common.druid.DruidConfig           : 初始化 Druid Servlet 配置完成 
+2020-11-05 16:27:06.111  INFO 9524 --- [restartedMain] c.c.s.common.druid.DruidConfig           : 初始化 Druid 过滤器配置完成 
+2020-11-05 16:27:06.459  WARN 9524 --- [restartedMain] c.a.druid.pool.DruidAbstractDataSource   : oracle.jdbc.driver.OracleDriver is deprecated.Having use oracle.jdbc.OracleDriver.
+2020-11-05 16:27:06.886  INFO 9524 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2020-11-05 16:27:06.938  INFO 9524 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: unimaxPersistenceUnit
+	...]
+2020-11-05 16:27:07.030  INFO 9524 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate Core {5.3.7.Final}
+2020-11-05 16:27:07.032  INFO 9524 --- [restartedMain] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2020-11-05 16:27:07.206  INFO 9524 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+2020-11-05 16:27:07.392  INFO 9524 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.Oracle12cDialect
+2020-11-05 16:27:07.525  INFO 9524 --- [restartedMain] org.hibernate.type.BasicTypeRegistry     : HHH000270: Type registration [byte[]] overrides previous : org.hibernate.type.BinaryType@67a6b370
+2020-11-05 16:27:07.526  INFO 9524 --- [restartedMain] org.hibernate.type.BasicTypeRegistry     : HHH000270: Type registration [[B] overrides previous : org.hibernate.type.BinaryType@67a6b370
+2020-11-05 16:27:07.527  INFO 9524 --- [restartedMain] org.hibernate.type.BasicTypeRegistry     : HHH000270: Type registration [Byte[]] overrides previous : org.hibernate.type.WrapperBinaryType@5b5ba6ac
+2020-11-05 16:27:07.527  INFO 9524 --- [restartedMain] org.hibernate.type.BasicTypeRegistry     : HHH000270: Type registration [[Ljava.lang.Byte;] overrides previous : org.hibernate.type.WrapperBinaryType@5b5ba6ac
+2020-11-05 16:27:07.664  WARN 9524 --- [restartedMain] org.hibernate.id.UUIDHexGenerator        : HHH000409: Using org.hibernate.id.UUIDHexGenerator which does not generate IETF RFC 4122 compliant UUID values; consider using org.hibernate.id.UUIDGenerator instead
+2020-11-05 16:27:08.301  INFO 9524 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'unimaxPersistenceUnit'
+2020-11-05 16:27:08.373  INFO 9524 --- [restartedMain] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'characterEncodingFilter' to: [/*]
+2020-11-05 16:27:08.374  INFO 9524 --- [restartedMain] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'sessionRepositoryFilter' to: [/*]
+2020-11-05 16:27:08.374  INFO 9524 --- [restartedMain] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2020-11-05 16:27:08.374  INFO 9524 --- [restartedMain] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'formContentFilter' to: [/*]
+2020-11-05 16:27:08.374  INFO 9524 --- [restartedMain] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'requestContextFilter' to: [/*]
+2020-11-05 16:27:08.375  INFO 9524 --- [restartedMain] .s.DelegatingFilterProxyRegistrationBean : Mapping filter: 'springSecurityFilterChain' to: [/*]
+2020-11-05 16:27:08.375  INFO 9524 --- [restartedMain] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'webStatFilter' to urls: [/*]
+2020-11-05 16:27:08.375  INFO 9524 --- [restartedMain] o.s.b.w.servlet.ServletRegistrationBean  : Servlet statViewServlet mapped to [/druid/*]
+2020-11-05 16:27:08.376  INFO 9524 --- [restartedMain] o.s.b.w.servlet.ServletRegistrationBean  : Servlet dispatcherServlet mapped to [/]
+2020-11-05 16:27:08.421  WARN 9524 --- [restartedMain] c.a.druid.pool.DruidAbstractDataSource   : oracle.jdbc.driver.OracleDriver is deprecated.Having use oracle.jdbc.OracleDriver.
+2020-11-05 16:27:08.437  INFO 9524 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: platformPersistenceUnit
+	...]
+2020-11-05 16:27:08.510  INFO 9524 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-2} inited
+2020-11-05 16:27:08.512  INFO 9524 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.Oracle12cDialect
+2020-11-05 16:27:08.569  INFO 9524 --- [restartedMain] org.hibernate.type.BasicTypeRegistry     : HHH000270: Type registration [byte[]] overrides previous : org.hibernate.type.BinaryType@67a6b370
+2020-11-05 16:27:08.569  INFO 9524 --- [restartedMain] org.hibernate.type.BasicTypeRegistry     : HHH000270: Type registration [[B] overrides previous : org.hibernate.type.BinaryType@67a6b370
+2020-11-05 16:27:08.570  INFO 9524 --- [restartedMain] org.hibernate.type.BasicTypeRegistry     : HHH000270: Type registration [Byte[]] overrides previous : org.hibernate.type.WrapperBinaryType@5b5ba6ac
+2020-11-05 16:27:08.570  INFO 9524 --- [restartedMain] org.hibernate.type.BasicTypeRegistry     : HHH000270: Type registration [[Ljava.lang.Byte;] overrides previous : org.hibernate.type.WrapperBinaryType@5b5ba6ac
+2020-11-05 16:27:08.671  INFO 9524 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'platformPersistenceUnit'
+2020-11-05 16:27:09.854  INFO 9524 --- [restartedMain] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'taskScheduler'
+2020-11-05 16:27:09.966  INFO 9524 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-11-05 16:27:10.339  WARN 9524 --- [restartedMain] org.thymeleaf.templatemode.TemplateMode  : [THYMELEAF][restartedMain] Template Mode 'HTML5' is deprecated. Using Template Mode 'HTML' instead.
+2020-11-05 16:27:10.369  INFO 9524 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2020-11-05 16:27:10.615  INFO 9524 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@521e1e33, org.springframework.security.web.context.SecurityContextPersistenceFilter@6dd69951, org.springframework.security.web.header.HeaderWriterFilter@16982d4d, org.springframework.web.filter.CorsFilter@8d7b83b, org.springframework.security.web.authentication.logout.LogoutFilter@1cbc94af, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@22f66742, org.springframework.security.web.session.ConcurrentSessionFilter@327bcfc6, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3b5d530e, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@34e95ac1, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3dbae9a5, org.springframework.security.web.session.SessionManagementFilter@5fb184f0, org.springframework.security.web.access.ExceptionTranslationFilter@1205346b, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@6e8f595a]
+2020-11-05 16:27:10.704  INFO 9524 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-11-05 16:27:10.769  INFO 9524 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2020-11-05 16:27:10.772  INFO 9524 --- [restartedMain] c.c.s.ServiceStationApplication          : Started ServiceStationApplication in 7.534 seconds (JVM running for 10.324)
+2020-11-05 16:28:26.760  INFO 9524 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-11-05 16:28:26.760  INFO 9524 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-11-05 16:28:26.769  INFO 9524 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 9 ms
+2020-11-05 16:28:36.085  INFO 9524 --- [http-nio-8080-exec-2] o.h.h.i.QueryTranslatorFactoryInitiator  : HHH000397: Using ASTQueryTranslatorFactory
+2020-11-05 16:28:37.256  INFO 9524 --- [http-nio-8080-exec-4] c.c.s.user.controller.UserController     : 翟笑天 登录成功！
+2020-11-05 16:33:41.202  INFO 9524 --- [Thread-23] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2020-11-05 16:33:41.203  INFO 9524 --- [Thread-23] o.s.s.c.ThreadPoolTaskScheduler          : Shutting down ExecutorService 'taskScheduler'
+2020-11-05 16:33:41.205  INFO 9524 --- [Thread-23] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'platformPersistenceUnit'
+2020-11-05 16:33:41.206  INFO 9524 --- [Thread-23] com.alibaba.druid.pool.DruidDataSource   : {dataSource-2} closing ...
+2020-11-05 16:33:41.211  INFO 9524 --- [Thread-23] com.alibaba.druid.pool.DruidDataSource   : {dataSource-2} closed
+2020-11-05 16:33:41.212  INFO 9524 --- [Thread-23] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'unimaxPersistenceUnit'
+2020-11-05 16:33:41.212  INFO 9524 --- [Thread-23] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closing ...
+2020-11-05 16:33:41.224  INFO 9524 --- [Thread-23] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
